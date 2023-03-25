@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Pingpong timer</title>
+    <!--Google Font-->
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&family=Roboto+Mono:wght@700&display=swap"
+      rel="stylesheet"
+    />
+    <!--Stylesheet-->
+    <style media="screen">
+      *,
+      *:before,
+      *:after {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+      }
+      body {
+        background: #448aff;
+      }
+
+      .first-row {
+        display: flex;
+        justify-content: space-around;
+      }
+
+      .second-row {
+        display: flex;
+        justify-content: space-around;
+      }
+      .container {
+        background-color: #ffffff;
+        width: 30%;
+        padding: 20px 0;
+        padding-bottom: 30px;
+        border-radius: 10px;
+        margin-top: 0.8%;
+      }
+
+      .container4 {
+        margin-left: 10%;
+      }
+
+      h1 {
+        text-align: center;
+        padding-bottom: 10px;
+      }
+
+      .timerDisplay {
+        position: relative;
+        width: 92%;
+        background: #ffffff;
+        left: 4%;
+        padding: 15px 0;
+        font-family: "Roboto mono", monospace;
+        color: #0381bb;
+        font-size: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        border-radius: 5px;
+        box-shadow: 0 0 20px rgba(0, 139, 253, 0.25);
+      }
+
+      .priceDisplay {
+        position: relative;
+        width: 92%;
+        background: #ffffff;
+        left: 4%;
+        padding: 15px 0;
+        font-family: "Roboto mono", monospace;
+        color: #0381bb;
+        font-size: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 5px;
+        box-shadow: 0 0 20px rgba(0, 139, 253, 0.25);
+      }
+
+      .price {
+        padding-right: 40px;
+      }
+
+      .buttons {
+        margin: 30px auto 0 auto;
+        display: flex;
+        justify-content: space-around;
+      }
+      .buttons button {
+        width: 100px;
+        height: 45px;
+        background-color: #205e94;
+        color: #ffffff;
+        border: none;
+        font-family: "Poppins", sans-serif;
+        font-size: 17px;
+        border-radius: 5px;
+        cursor: pointer;
+        outline: none;
+      }
+      .buttons button:nth-last-child(2) {
+        background-color: #d23332;
+      }
+      .buttons button:nth-last-child(1) {
+        background-color: #20b380;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="first-row">
+      <div class="container">
+        <h1>Stol 1</h1>
+        <div class="timerDisplay" id="timerDisplay">00 : 00 : 00</div>
+        <div class="priceDisplay">
+            <span class="price" id="price">0 </span>so'm
+        </div>
+        <div class="buttons">
+          <button id="pauseTimer">To'xtatish</button>
+          <button id="startTimer">Boshlash</button>
+          <button onclick="reset()" id="resetTimer">Yangilash</button>
+        </div>
+      </div>
+
+      <div class="container">
+        <h1>Stol 2</h1>
+        <div class="timerDisplay" id="timerDisplay2">00 : 00 : 00</div>
+        <div class="priceDisplay">
+          <span class="price" id="price2">0</span>so'm
+        </div>
+        <div class="buttons">
+          <button id="pauseTimer2">To'xtatish</button>
+          <button id="startTimer2">Boshlash</button>
+          <button onclick="reset2()" id="resetTimer2">Yangilash</button>
+        </div>
+      </div>
+
+      <div class="container">
+        <h1>Stol 3</h1>
+        <div class="timerDisplay" id="timerDisplay3">00 : 00 : 00</div>
+        <div class="priceDisplay">
+          <span class="price" id="price3">0</span>so'm
+        </div>
+        <div class="buttons">
+          <button id="pauseTimer3">To'xtatish</button>
+          <button id="startTimer3">Boshlash</button>
+          <button onclick="reset3()" id="resetTimer3">Yangilash</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="second-row">
+        <div class="container container4">
+            <h1>Stol 4</h1>
+            <div class="timerDisplay" id="timerDisplay4">00 : 00 : 00</div>
+            <div class="priceDisplay">
+                <span class="price" id="price4">0</span>so'm
+            </div>
+            <div class="buttons">
+                <button id="pauseTimer4">To'xtatish</button>
+                <button id="startTimer4">Boshlash</button>
+                <button onclick="reset4()" id="resetTimer4">Yangilash</button>
+            </div>
+        </div>
+
+        <div class="container">
+            <h1>Stol 5</h1>
+            <div class="timerDisplay" id="timerDisplay5">00 : 00 : 00</div>
+            <div class="priceDisplay">
+                <span class="price" id="price5">0</span>so'm
+            </div>
+            <div class="buttons">
+                <button id="pauseTimer5">To'xtatish</button>
+                <button id="startTimer5">Boshlash</button>
+                <button onclick="reset5()" id="resetTimer5">Yangilash</button>
+            </div>
+        </div>
+    <div>
+
+    <script>
+      // Table 1
+      let count = 0;
+      let [seconds, minutes, hours] = [0, 0, 0];
+      let timerRef = document.querySelector("#timerDisplay");
+
+      let calc = document.getElementById("price");
+      let int = null;
+
+      document.getElementById("startTimer").addEventListener("click", () => {
+        if (int !== null) {
+          clearInterval(int);
+        }
+        int = setInterval(displayTimer, 1000);
+      });
+
+      document.getElementById("pauseTimer").addEventListener("click", () => {
+        clearInterval(int);
+      });
+
+      document.getElementById("resetTimer").addEventListener("click", () => {
+        clearInterval(int);
+        [seconds, minutes, hours] = [0, 0, 0];
+        timerRef.innerHTML = "00 : 00 : 00 ";
+        count = 0;
+      });
+
+      function displayTimer() {
+        seconds++;
+        count++;
+        if (seconds == 60) {
+          seconds = 0;
+          minutes++;
+          if (minutes == 60) {
+            minutes = 0;
+            hours++;
+          }
+        }
+        let price = count * (25000 / 3600);
+        calc.innerHTML = price.toFixed(2);
+        let h = hours < 10 ? "0" + hours : hours;
+        let m = minutes < 10 ? "0" + minutes : minutes;
+        let s = seconds < 10 ? "0" + seconds : seconds;
+
+        timerRef.innerHTML = ` ${h} : ${m} : ${s}`;
+      }
+
+      function reset() {
+        document.getElementById("price").innerText = 0;
+      }
+
+      //   table 2
+
+      let count2 = 0;
+      let [seconds2, minutes2, hours2] = [0, 0, 0];
+      let timerRef2 = document.querySelector("#timerDisplay2");
+
+      let calc2 = document.getElementById("price2");
+      let int2 = null;
+
+      document.getElementById("startTimer2").addEventListener("click", () => {
+        if (int2 !== null) {
+          clearInterval(int2);
+        }
+        int2 = setInterval(displayTimer2, 1000);
+      });
+
+      document.getElementById("pauseTimer2").addEventListener("click", () => {
+        clearInterval(int2);
+      });
+
+      document.getElementById("resetTimer2").addEventListener("click", () => {
+        clearInterval(int2);
+        [seconds2, minutes2, hours2] = [0, 0, 0];
+        timerRef2.innerHTML = "00 : 00 : 00 ";
+        count2 = 0;
+      });
+
+      function displayTimer2() {
+        seconds2++;
+        count2++;
+        if (seconds2 == 60) {
+          seconds2 = 0;
+          minutes2++;
+          if (minutes2 == 60) {
+            minutes2 = 0;
+            hours2++;
+          }
+        }
+        let price2 = count2 * (25000 / 3600);
+        calc2.innerHTML = price2.toFixed(2);
+        let h2 = hours2 < 10 ? "0" + hours2 : hours2;
+        let m2 = minutes2 < 10 ? "0" + minutes2 : minutes2;
+        let s2 = seconds2 < 10 ? "0" + seconds2 : seconds2;
+
+        timerRef2.innerHTML = ` ${h2} : ${m2} : ${s2}`;
+      }
+
+      function reset2() {
+        document.getElementById("price2").innerText = 0;
+      }
+
+      //   table 3
+
+      let count3 = 0;
+      let [seconds3, minutes3, hours3] = [0, 0, 0];
+      let timerRef3 = document.querySelector("#timerDisplay3");
+
+      let calc3 = document.getElementById("price3");
+      let int3 = null;
+
+      document.getElementById("startTimer3").addEventListener("click", () => {
+        if (int3 !== null) {
+          clearInterval(int3);
+        }
+        int3 = setInterval(displayTimer3, 1000);
+      });
+
+      document.getElementById("pauseTimer3").addEventListener("click", () => {
+        clearInterval(int3);
+      });
+
+      document.getElementById("resetTimer3").addEventListener("click", () => {
+        clearInterval(int3);
+        [seconds3, minutes3, hours3] = [0, 0, 0];
+        timerRef3.innerHTML = "00 : 00 : 00 ";
+        count3 = 0;
+      });
+
+      function displayTimer3() {
+        seconds3++;
+        count3++;
+        if (seconds3 == 60) {
+          seconds3 = 0;
+          minutes3++;
+          if (minutes3 == 60) {
+            minutes3 = 0;
+            hours3++;
+          }
+        }
+        let price3 = count3 * (25000 / 3600);
+        calc3.innerHTML = price3.toFixed(2);
+        let h3 = hours3 < 10 ? "0" + hours3 : hours3;
+        let m3 = minutes3 < 10 ? "0" + minutes3 : minutes3;
+        let s3 = seconds3 < 10 ? "0" + seconds3 : seconds3;
+
+        timerRef3.innerHTML = ` ${h3} : ${m3} : ${s3}`;
+      }
+
+      function reset3() {
+        document.getElementById("price3").innerText = 0;
+      }
+
+      //   table 4
+
+      let count4 = 0;
+      let [seconds4, minutes4, hours4] = [0, 0, 0];
+      let timerRef4 = document.querySelector("#timerDisplay4");
+
+      let calc4 = document.getElementById("price4");
+      let int4 = null;
+
+      document.getElementById("startTimer4").addEventListener("click", () => {
+        if (int4 !== null) {
+          clearInterval(int4);
+        }
+        int4 = setInterval(displayTimer4, 1000);
+      });
+
+      document.getElementById("pauseTimer4").addEventListener("click", () => {
+        clearInterval(int4);
+      });
+
+      document.getElementById("resetTimer4").addEventListener("click", () => {
+        clearInterval(int4);
+        [seconds4, minutes4, hours4] = [0, 0, 0];
+        timerRef4.innerHTML = "00 : 00 : 00 ";
+        count4 = 0;
+      });
+
+      function displayTimer4() {
+        seconds4++;
+        count4++;
+        if (seconds4 == 60) {
+          seconds4 = 0;
+          minutes4++;
+          if (minutes4 == 60) {
+            minutes4 = 0;
+            hours4++;
+          }
+        }
+        let price4 = count4 * (25000 / 3600);
+        calc4.innerHTML = price4.toFixed(2);
+        let h4 = hours4 < 10 ? "0" + hours4 : hours4;
+        let m4 = minutes4 < 10 ? "0" + minutes4 : minutes4;
+        let s4 = seconds4 < 10 ? "0" + seconds4 : seconds4;
+
+        timerRef4.innerHTML = ` ${h4} : ${m4} : ${s4}`;
+      }
+
+      function reset4() {
+        document.getElementById("price4").innerText = 0;
+      }
+
+
+      //   table 5
+
+      let count5 = 0;
+      let [seconds5, minutes5, hours5] = [0, 0, 0];
+      let timerRef5 = document.querySelector("#timerDisplay5");
+
+      let calc5 = document.getElementById("price5");
+      let int5 = null;
+
+      document.getElementById("startTimer5").addEventListener("click", () => {
+        if (int5 !== null) {
+          clearInterval(int5);
+        }
+        int5 = setInterval(displayTimer5, 1000);
+      });
+
+      document.getElementById("pauseTimer5").addEventListener("click", () => {
+        clearInterval(int5);
+      });
+
+      document.getElementById("resetTimer5").addEventListener("click", () => {
+        clearInterval(int5);
+        [seconds5, minutes5, hours5] = [0, 0, 0];
+        timerRef5.innerHTML = "00 : 00 : 00 ";
+        count5 = 0;
+      });
+
+      function displayTimer5() {
+        seconds5++;
+        count5++;
+        if (seconds5 == 60) {
+          seconds5 = 0;
+          minutes5++;
+          if (minutes5 == 60) {
+            minutes5 = 0;
+            hours5++;
+          }
+        }
+        let price5 = count5 * (25000 / 3600);
+        calc5.innerHTML = price5.toFixed(2);
+        let h5 = hours5 < 10 ? "0" + hours5 : hours5;
+        let m5 = minutes5 < 10 ? "0" + minutes5 : minutes5;
+        let s5 = seconds5 < 10 ? "0" + seconds5 : seconds5;
+
+        timerRef5.innerHTML = ` ${h5} : ${m5} : ${s5}`;
+      }
+
+      function reset5() {
+        document.getElementById("price5").innerText = 0;
+      }
+    </script>
+  </body>
+</html>
